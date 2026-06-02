@@ -6,3 +6,67 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #333; }
+/* === إصلاح الموبايل لـ GEX ONLINE === */
+@media (max-width: 768px) {
+  /* الهيدر */
+  header, nav {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px !important;
+  }
+  
+  header > div, nav > div {
+    font-size: 12px !important;
+    padding: 6px 8px !important;
+  }
+
+  /* اللوجو */
+  header img, nav img {
+    height: 40px !important;
+    width: auto !important;
+  }
+
+  /* الكروت */
+  .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 12px !important;
+  }
+
+  /* كرت اللعبة */
+  .grid > div, .grid > a {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 180px !important;
+    aspect-ratio: 3/4 !important;
+  }
+
+  .grid img {
+    object-fit: cover !important;
+    width: 100% !important;
+  }
+
+  /* النص داخل الكرت */
+  .grid h3, .grid p {
+    font-size: 14px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* زر اشحن الآن */
+  .grid button, .grid a button {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+
+  /* العنوان الرئيسي */
+  h1 {
+    font-size: 28px !important;
+  }
+  
+  /* منع التمرير الأفقي */
+  body {
+    overflow-x: hidden !important;
+  }
+}
