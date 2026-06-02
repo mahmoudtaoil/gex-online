@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Service {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  name_en     String?
+  slug        String   @unique
+  category    String
+  image       String
+  order       Int      @default(999)
+  isActive    Boolean  @default(true)
+  isPopular   Boolean  @default(false)
+  packages    Json     @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  password    String
+  name        String?
+  role        String   @default("admin")
+  createdAt   DateTime @default(now())
+}
+
+model Setting {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  key         String   @unique @default("main")
+  whatsapp    String   @default("9639680964")
+  telegram    String   @default("https://t.me/gex")
+  instagram   String   @default("https://instagram.com/gex") 
+  tiktok      String   @default("")
+  facebook    String   @default("https://facebook.com")
+  gmail       String   @default("mailto:info@gex.com")
+  phone       String   @default("")
+  logoUrl     String   @default("/images/logo.png")
+  bgHome      String   @default("/images/backgrounds/gx.png")
+  bgService   String   @default("/images/backgrounds/gx.png")
+  updatedAt   DateTime @updatedAt
+}
