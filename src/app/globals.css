@@ -1,72 +1,37 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { background: #000; color: #fff; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-a { text-decoration: none; color: inherit; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #333; }
-/* === إصلاح الموبايل لـ GEX ONLINE === */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==== MOBILE FIX GEX ONLINE ==== */
 @media (max-width: 768px) {
-  /* الهيدر */
-  header, nav {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    padding: 10px !important;
-  }
-  
-  header > div, nav > div {
-    font-size: 12px !important;
-    padding: 6px 8px !important;
-  }
-
-  /* اللوجو */
-  header img, nav img {
-    height: 40px !important;
-    width: auto !important;
-  }
-
-  /* الكروت */
+  /* خلي الكروت 2 بالصف */
   .grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    padding: 0 12px !important;
-  }
-
-  /* كرت اللعبة */
-  .grid > div, .grid > a {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 180px !important;
-    aspect-ratio: 3/4 !important;
-  }
-
-  .grid img {
-    object-fit: cover !important;
-    width: 100% !important;
-  }
-
-  /* النص داخل الكرت */
-  .grid h3, .grid p {
-    font-size: 14px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
-  /* زر اشحن الآن */
-  .grid button, .grid a button {
-    font-size: 11px !important;
-    padding: 4px 8px !important;
-  }
-
-  /* العنوان الرئيسي */
-  h1 {
-    font-size: 28px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+    padding: 0 0.75rem !important;
   }
   
-  /* منع التمرير الأفقي */
+  /* صغر الهيدر */
+  header {
+    padding: 0.5rem 1rem !important;
+  }
+  
+  header h1, header .text-2xl {
+    font-size: 1.1rem !important;
+  }
+  
+  /* صغر الصور */
+  .grid img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  /* صغر النص */
+  .grid span, .grid p {
+    font-size: 0.8rem !important;
+  }
+  
   body {
-    overflow-x: hidden !important;
+    padding-bottom: 70px !important;
   }
 }
