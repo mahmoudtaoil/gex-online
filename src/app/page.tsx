@@ -91,7 +91,8 @@ function HomeContent() {
       <div style={{ position: 'fixed', inset: 0, background: 'linear-gradient(180deg, rgba(2,6,23,0.2) 0%, rgba(2,6,23,0.7) 70%, #020617 100%)' }} />
       <div style={{ position: 'relative', zIndex: 10 }}>
         <header style={{ background: 'linear-gradient(to bottom, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.4) 70%, transparent 100%)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.06)', position: 'sticky', top: 0, zIndex: 50 }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto', height: 80, padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', direction: 'ltr' }}>
+          {/* تم التعديل: أضفت flexWrap و minHeight بدل height ثابت */}
+          <div style={{ maxWidth: 1280, margin: '0 auto', minHeight: 80, padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', direction: 'ltr', flexWrap: 'wrap', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
                 {logoUrl? (
@@ -104,7 +105,8 @@ function HomeContent() {
                 <svg width="18" height="18" fill="none" stroke="#cbd5e1" strokeWidth="2"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
               </button>
             </div>
-            <nav style={{ display: 'flex', gap: 8, direction: 'rtl', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+            {/* تم التعديل: حذفت position:absolute و left:50% اللي كانوا يسببوا الإزاحة */}
+            <nav style={{ display: 'flex', gap: 8, direction: 'rtl', flexWrap: 'wrap', justifyContent: 'center' }}>
               {cats.map(c => (
                 <button key={c.k} onClick={() => handleSetActive(c.k)} style={{ position: 'relative', padding: '9px 20px', background: active===c.k? 'rgba(30,25,50,0.7)' : 'transparent', border: active===c.k? '1px solid rgba(168,85,247,0.4)' : '1px solid transparent', borderRadius: 12, color: active===c.k? '#fff' : '#9aa3b2', fontSize: 14, cursor: 'pointer', transition: '0.2s' }}>
                   {c.t}
@@ -161,9 +163,10 @@ function HomeContent() {
                 <p style={{ color: '#9aa3b8', marginTop: 8 }}>شحن جميع {current.t} بأفضل الأسعار</p>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 38 }}>
-                <div style={{ display: 'flex', gap: 10, padding: 8, background: 'rgba(10,14,25,0.85)', borderRadius: 18, border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', direction: 'ltr' }}>
+                {/* تم التعديل: أضفت overflowX */}
+                <div style={{ display: 'flex', gap: 10, padding: 8, background: 'rgba(10,14,25,0.85)', borderRadius: 18, border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', direction: 'ltr', overflowX: 'auto', maxWidth: '100%' }}>
                   {filters.map(f => { const on = f.k === active; return (
-                    <button key={f.k} onClick={() => handleSetActive(f.k)} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '11px 18px', borderRadius: 12, background: on? 'rgba(20,25,40,1)' : 'transparent', border: '1.5px solid transparent', position: 'relative', color: on? '#fff' : '#7b8499', fontSize: 14, cursor: 'pointer', transition: '0.25s', boxShadow: on? `inset 0 1px 0 rgba(255,255,255,0.05), 0 0 20px ${f.c}30` : 'none' }}>
+                    <button key={f.k} onClick={() => handleSetActive(f.k)} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '11px 18px', borderRadius: 12, background: on? 'rgba(20,25,40,1)' : 'transparent', border: '1.5px solid transparent', position: 'relative', color: on? '#fff' : '#7b8499', fontSize: 14, cursor: 'pointer', transition: '0.25s', boxShadow: on? `inset 0 1px 0 rgba(255,255,255,0.05), 0 0 20px ${f.c}30` : 'none', whiteSpace: 'nowrap' }}>
                       {on && <div style={{ position: 'absolute', inset: -1.5, borderRadius: 12, padding: 1.5, background: `linear-gradient(90deg, #22d3ee, ${f.c})`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />}
                       <span>{f.t}</span>
                       <svg width="19" height="19" fill="none" stroke={on? f.c : '#6b7280'} strokeWidth="1.8"><path d={f.ic} strokeLinecap="round"/></svg>
@@ -222,17 +225,20 @@ function HomeContent() {
           </div>
         </footer>
       </div>
-      {/* MOBILE FIX - لا يغير الديسكتوب */}
+      {/* MOBILE FIX - تم التعديل بالكامل */}
       <style>{`
         @media (max-width: 768px) {
-          header > div:first-child { height: 56px!important; padding: 0 12px!important; }
-          header nav { position: static!important; transform: none!important; left: auto!important; order: 3; width: 100%; overflow-x: auto; justify-content: flex-start; padding: 8px 12px; gap: 6px; }
-          header nav button { padding: 6px 12px!important; font-size: 12px!important; flex-shrink: 0; }
-          header > div:first-child { flex-wrap: wrap; height: auto!important; padding-bottom: 8px!important; }
+          html, body { overflow-x: hidden!important; max-width: 100vw!important; }
+          header > div:first-child { min-height: 56px!important; height: auto!important; padding: 8px 12px!important; gap: 8px!important; }
+          header nav { position: static!important; transform: none!important; left: auto!important; order: 3; width: 100%; overflow-x: auto; justify-content: flex-start; padding: 8px 0; gap: 6px; -webkit-overflow-scrolling: touch; }
+          header nav button { padding: 6px 12px!important; font-size: 12px!important; flex-shrink: 0; white-space: nowrap; }
+          header > div:first-child { flex-wrap: wrap; }
           main { padding: 20px 12px!important; }
           div[style*="grid-template-columns: repeat(5,1fr)"] { grid-template-columns: repeat(2, minmax(0,1fr))!important; gap: 12px!important; }
           div[style*="height: 240"] { height: 190px!important; }
           div[style*="height: 240"] > div > div:first-child { font-size: 18px!important; }
+          div[style*="borderRadius: 18"] { overflow-x: auto!important; padding: 6px!important; }
+          * { max-width: 100vw!important; }
         }
       `}</style>
     </div>
