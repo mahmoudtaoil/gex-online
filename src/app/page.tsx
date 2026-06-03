@@ -222,6 +222,19 @@ function HomeContent() {
           </div>
         </footer>
       </div>
+      {/* MOBILE FIX - لا يغير الديسكتوب */}
+      <style>{`
+        @media (max-width: 768px) {
+          header > div:first-child { height: 56px!important; padding: 0 12px!important; }
+          header nav { position: static!important; transform: none!important; left: auto!important; order: 3; width: 100%; overflow-x: auto; justify-content: flex-start; padding: 8px 12px; gap: 6px; }
+          header nav button { padding: 6px 12px!important; font-size: 12px!important; flex-shrink: 0; }
+          header > div:first-child { flex-wrap: wrap; height: auto!important; padding-bottom: 8px!important; }
+          main { padding: 20px 12px!important; }
+          div[style*="grid-template-columns: repeat(5,1fr)"] { grid-template-columns: repeat(2, minmax(0,1fr))!important; gap: 12px!important; }
+          div[style*="height: 240"] { height: 190px!important; }
+          div[style*="height: 240"] > div > div:first-child { font-size: 18px!important; }
+        }
+      `}</style>
     </div>
   );
 }
