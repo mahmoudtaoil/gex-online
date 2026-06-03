@@ -3,17 +3,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getSettings } from '@/lib/settings';
 
-// خلي الصفحة تتحدث فوراً بعد ما تغير اللوغو من اللوحة
 export const revalidate = 0;
 
-// هون صار الـ metadata ديناميكي
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings().catch(() => ({}));
+  const raw = await getSettings().catch(() => null);
+  const settings = raw as any;
 
-  // رابط اللوغو من الإعدادات (نفس اللي بتغيره من /admin/settings)
   const logoUrl = settings?.logoUrl || 'https://res.cloudinary.com/dx7ivska6/image/upload/gex-online/settings/logoUrl.png';
 
-  // نعمل نسخة 1200×630 لواتساب وفيسبوك من نفس الصورة على كلاودنري
   const ogImage = logoUrl.includes('cloudinary.com')
    ? logoUrl.replace('/upload/', '/upload/w_1200,h_630,c_fill,q_auto,f_auto/')
     : logoUrl;
