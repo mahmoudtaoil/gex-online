@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const logoUrl = settings?.logoUrl || 'https://res.cloudinary.com/dx7ivska6/image/upload/gex-online/settings/logoUrl.png';
 
   const ogImage = logoUrl.includes('cloudinary.com')
-   ? logoUrl.replace('/upload/', '/upload/w_1200,h_630,c_fill,q_auto,f_auto/')
+  ? logoUrl.replace('/upload/', '/upload/w_1200,h_630,c_pad,b_rgb:020617,q_auto,f_auto/')
     : logoUrl;
 
   return {
@@ -102,7 +102,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </footer>
 
         <style>{`
-         .social-neon:hover {
+        .social-neon:hover {
             transform: scale(1.1);
             filter: brightness(1.2);
           }
