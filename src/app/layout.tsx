@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const logoUrl = settings?.logoUrl || 'https://res.cloudinary.com/dx7ivska6/image/upload/gex-online/settings/logoUrl.png';
 
   const ogImage = logoUrl.includes('cloudinary.com')
-  ? logoUrl.replace('/upload/', '/upload/w_1200,h_630,c_pad,b_rgb:020617,q_auto,f_auto/')
+   ? logoUrl.replace('/upload/', '/upload/w_1200,h_630,c_pad,b_rgb:020617,q_auto,f_auto/')
     : logoUrl;
 
   return {
@@ -52,6 +52,7 @@ const icons = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings: any = await getSettings().catch(() => ({}));
+  const logoUrl = settings?.logoUrl || 'https://res.cloudinary.com/dx7ivska6/image/upload/gex-online/settings/logoUrl.png';
   const whatsapp = settings?.whatsapp?.replace(/[^0-9]/g, '');
 
   const socials = [
@@ -64,6 +65,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="ar" dir="rtl">
+      <head>
+        <link rel="icon" href={logoUrl} type="image/png" sizes="any" />
+        <link rel="shortcut icon" href={logoUrl} />
+        <link rel="apple-touch-icon" href={logoUrl} />
+      </head>
       <body style={{ background: '#020617', color: '#fff', margin: 0 }}>
         {children}
 
