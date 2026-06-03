@@ -17,7 +17,6 @@ const icons = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // تم التعديل هنا: أضفنا : any
   const settings: any = await getSettings().catch(() => ({}));
   const whatsapp = settings?.whatsapp?.replace(/[^0-9]/g, '');
   
@@ -39,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             
             <div style={{ display: 'flex', justifyContent: 'center', gap: 18, marginBottom: 28, flexWrap: 'wrap' }}>
               {socials.map(s => (
-                <a key={s.k} href={s.url} target="_blank" rel="noopener" style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(10,15,30,0.9)', border: `2px solid ${s.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, boxShadow: `0 0 20px ${s.color}70, inset 0 0 12px ${s.color}20`, transition: 'all 0.3s', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <a key={s.k} href={s.url} target="_blank" rel="noopener" className="social-neon" style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(10,15,30,0.9)', border: `2px solid ${s.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, boxShadow: `0 0 20px ${s.color}70, inset 0 0 12px ${s.color}20`, transition: 'all 0.3s', textDecoration: 'none' }}>
                   {icons[s.k as keyof typeof icons]}
                 </a>
               ))}
@@ -67,6 +66,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
           </div>
         </footer>
+
+        <style>{`
+          .social-neon:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+          }
+        `}</style>
       </body>
     </html>
   );
