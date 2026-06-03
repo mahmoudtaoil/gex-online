@@ -25,7 +25,7 @@ const icons = {
   telegram: (c:string) => <svg width="20" height="20" viewBox="0 0 24 24" fill={c}><path d="M21.5 3.5L2.8 10.8c-1.4-.9 1.9.1 2.2l4.6 1.4 1.8 5.6c.2.7 1.9 1.5.4l2.7-2.6 5.5 4c.8.6 1.9.3 2.2-.7L23.5 4.8c.3-1-.7-1.8-2-1.3z"/></svg>,
   instagram: (c:string) => <svg width="20" height="20" viewBox="0 0 24" fill="none" stroke={c} strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill={c} stroke="none"/></svg>,
   tiktok: (c:string) => <svg width="20" height="20" viewBox="0 0 24 24" fill={c}><path d="M16.6 3c.5 2.3 2 3.8 4.4 4.2v3.3c-1.6.1-3.1-.4-4.4-1.3v6.7c0 4.5-3.7 7.2-7.2 6.3-2.5-.6-4.4-3-4.4-5.7 0-3.2 2.3-5.8 5.5-5.9v3.4c-.7.1-1.4.5-1.8 1.2-.6 1.1.1 2.5 1.3 2.7 1.2.2 2.3-.6 2.3-1.8V3h4.3z"/></svg>,
-  facebook: (c:string) => <svg width="20" height="20" viewBox="0 0 24 24" fill={c}><path d="M22 12c0-5.5-4.5-10-10S2 6.5 2 12c0 5 3.7 9.1 8.5 9.9v-7H8v-2.9h2.5V9.5c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5v1.8H17l-.5 2.9h-2.4v7C18.3 21.1 22 17 22 12z"/></svg>,
+  facebook: (c:string) => <svg width="20" height="20" viewBox="0 0 24" fill={c}><path d="M22 12c0-5.5-4.5-10-10S2 6.5 2 12c0 5 3.7 9.1 8.5 9.9v-7H8v-2.9h2.5V9.5c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5v1.8H17l-.5 2.9h-2.4v7C18.3 21.1 22 17 22 12z"/></svg>,
   gmail: (c:string) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6c0-1.1.9-2 2-2h12c1.1 0 2.9 2 2v12c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6z" fill={c} opacity=".2"/><path d="M20 6l-8 5-8-5" stroke={c} strokeWidth="2" strokeLinecap="round"/><rect x="4" y="4" width="16" height="16" rx="2" stroke={c} strokeWidth="2" fill="none"/></svg>,
 };
 
@@ -69,7 +69,6 @@ function HomeContent() {
                 <svg width="16" height="16" fill="none" stroke="#cbd5e1" strokeWidth="2"><circle cx="7" cy="7" r="5.5"/><path d="M12 12l3.5 3.5"/></svg>
               </button>
             </div>
-            {/* تم التعديل: نافبار ببوكسات نيون وخط عريض */}
             <nav style={{ display: 'flex', gap: 6, direction: 'rtl', flexWrap: 'wrap', justifyContent: 'center', flex: '1 1 auto' }}>
               {cats.map(c => {
                 const isActive = active===c.k;
@@ -82,7 +81,7 @@ function HomeContent() {
                     borderRadius: 10,
                     color: isActive? '#fff' : '#e2e8f0',
                     fontSize: 13,
-                    fontWeight: 700, /* تم التعديل: خط عريض */
+                    fontWeight: 700,
                     cursor: 'pointer',
                     transition: '0.2s',
                     boxShadow: isActive? '0 0 12px rgba(168,85,247,0.4), inset 0 0 8px rgba(168,85,247,0.2)' : 'none',
@@ -102,7 +101,7 @@ function HomeContent() {
               </Link>
               <a href={settings?.whatsapp? `https://wa.me/${settings.whatsapp.replace(/[^0-9]/g,'')}` : '#'} target="_blank" style={{ padding: '7px 12px', borderRadius: 10, background: 'rgba(15,20,35,0.9)', border: '1.5px solid #22c55e', color: '#fff', display: 'flex', gap: 6, alignItems: 'center', fontSize: 13, fontWeight: 600, textDecoration: 'none', boxShadow: '0 0 10px rgba(34,197,94,0.3)' }}>
                 واتساب
-                <svg width="16" height="16" fill="#25D366" viewBox="0 0 24 24"><path d="M12 0a12 12 0 00-10 19l-2 5 5-2a12 12 0 1017-17A12 12 0 0012 0z"/></svg>
+                <svg width="16" height="16" fill="#25D366" viewBox="0 0 24 24"><path d="M12 0a12 12 0 00-10 19l-2 5 5-2a12 12 0 1017-17A12 0 0012 0z"/></svg>
               </a>
             </div>
           </div>
@@ -117,20 +116,22 @@ function HomeContent() {
                 <p style={{ color: '#9aa3b8', marginTop: 6, fontSize: 14 }}>شحن جميع {current.t} بأفضل الأسعار</p>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-                <div style={{ display: 'flex', gap: 8, padding: 6, background: 'rgba(10,14,25,0.85)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)', overflowX: 'auto', maxWidth: '100%' }}>
+                {/* تم التعديل 1: شلت overflowX وحطيت wrap */}
+                <div style={{ display: 'flex', gap: 8, padding: 6, background: 'rgba(10,14,25,0.85)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
                   {filters.map(f => { const on = f.k === active; return (<button key={f.k} onClick={() => handleSetActive(f.k)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderRadius: 10, background: on? 'rgba(20,25,40,1)' : 'transparent', color: on? '#fff' : '#9aa3b8', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', border: on? `1px solid ${f.c}` : '1px solid transparent', cursor: 'pointer' }}><span>{f.t}</span></button>)})}
                 </div>
               </div>
               {loading? <div style={{ textAlign: 'center', color: '#64748b' }}>جاري التحميل...</div> : (
                 <div style={{ position: 'relative' }}>
-                  {/* تم التعديل: استخدمت كلاس gex-grid بدل inline */}
                   <div className="gex-grid">
                     {items.map((s:any) => (
                       <Link key={s.id} href={`/service/${s.slug}`} style={{ textDecoration: 'none' }}>
-                        <div style={{ aspectRatio: '3/4', borderRadius: 14, overflow: 'hidden', position: 'relative', background: '#0b1020', border: '1px solid rgba(56,189,248,0.18)', backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.85), transparent 60%), url('${s.image || '/images/backgrounds/gx.png'}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                        {/* تم التعديل 2: رجعت تصميم الكرت الأصلي مع الحركة وزر اشحن الآن */}
+                        <div style={{ height: 210, borderRadius: 14, overflow: 'hidden', position: 'relative', background: '#0b1020', border: '1px solid rgba(56,189,248,0.18)', backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.85), transparent 60%), url('${s.image || '/images/backgrounds/gx.png'}')`, backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform 0.25s', cursor: 'pointer' }} onMouseEnter={e=>e.currentTarget.style.transform='scale(1.03)'} onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>
                           <div style={{ position: 'absolute', bottom: 10, left: 8, right: 8, textAlign: 'center' }}>
                             <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', textShadow: '0 1px 4px #000' }}>{s.name.split(' ')[0]}</div>
-                            <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
+                            <div style={{ fontSize: 11, color: '#cbd5e1', marginBottom: 6, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
+                            <div style={{ height: 24, borderRadius: 7, background: 'linear-gradient(90deg,#22d3ee,#a855f7)', padding: 1 }}><div style={{ height: '100%', background: 'rgba(0,0,0,0.8)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, color: '#fff' }}>اشحن الآن</div></div>
                           </div>
                         </div>
                       </Link>

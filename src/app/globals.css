@@ -2,31 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === تم التعديل: تصفير كامل يمنع الفراغ فوق الهيدر === */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  margin: 0!important;
-  padding: 0!important;
-  overflow-x: hidden!important;
-  -webkit-text-size-adjust: 100%;
-}
-* { box-sizing: border-box; }
-img, video, svg { max-width: 100%; height: auto; display: block; }
+html, body { margin:0!important; padding:0!important; width:100%; max-width:100%; overflow-x:hidden!important; }
+* { box-sizing:border-box; }
+img,video,svg { max-width:100%; height:auto; display:block; }
 
-/* شبكة الكروت - ديسكتوب 5، موبايل 2 */
-.gex-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0,1fr));
-  gap: 16px;
-}
-
-/* ==== MOBILE FIX ==== */
-@media (max-width: 768px) {
- .gex-grid {
-    grid-template-columns: repeat(2, minmax(0,1fr))!important;
-    gap: 12px!important;
-  }
-  header { padding-top: 0!important; }
-  body { padding-bottom: 70px!important; }
+.gex-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; }
+@media (max-width:768px){
+ .gex-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:12px!important; }
 }
