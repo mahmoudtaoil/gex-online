@@ -2,52 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === تم التعديل: إصلاح أساسي يمنع التراكب الأفقي === */
+/* === تم التعديل: تصفير كامل يمنع الفراغ فوق الهيدر === */
 html, body {
   width: 100%;
   max-width: 100%;
+  margin: 0!important;
+  padding: 0!important;
   overflow-x: hidden!important;
   -webkit-text-size-adjust: 100%;
 }
-* {
-  box-sizing: border-box;
-}
-img, video, svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
+* { box-sizing: border-box; }
+img, video, svg { max-width: 100%; height: auto; display: block; }
+
+/* شبكة الكروت - ديسكتوب 5، موبايل 2 */
+.gex-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0,1fr));
+  gap: 16px;
 }
 
-/* ==== MOBILE FIX GEX ONLINE ==== */
+/* ==== MOBILE FIX ==== */
 @media (max-width: 768px) {
-  /* خلي الكروت 2 بالصف */
- .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr))!important;
-    gap: 0.75rem!important;
-    padding: 0 0.75rem!important;
+ .gex-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr))!important;
+    gap: 12px!important;
   }
-
-  /* صغر الهيدر */
-  header {
-    padding: 0.5rem 1rem!important;
-  }
-
-  header h1, header.text-2xl {
-    font-size: 1.1rem!important;
-  }
-
-  /* صغر الصور */
- .grid img {
-    width: 48px!important;
-    height: 48px!important;
-  }
-
-  /* صغر النص */
- .grid span,.grid p {
-    font-size: 0.8rem!important;
-  }
-
-  body {
-    padding-bottom: 70px!important;
-  }
+  header { padding-top: 0!important; }
+  body { padding-bottom: 70px!important; }
 }
