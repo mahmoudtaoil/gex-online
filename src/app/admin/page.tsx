@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import DeleteButton from './DeleteButton'
+import { ChevronUp, ChevronDown } from 'lucide-react'
 
 async function toggleService(formData: FormData) {
   'use server'
@@ -12,6 +13,41 @@ async function toggleService(formData: FormData) {
   const service = await prisma.service.findUnique({ where: { id } })
   if (!service) return
   await prisma.service.update({ where: { id }, data: { isActive:!service.isActive } })
+  revalidatePath('/admin')
+}
+
+// جديد: Server Action لتبديل الترتيب
+async function moveService(formData: FormData) {
+  'use server'
+  const id = formData.get('id') as string
+  const direction = formData.get('direction') as string
+  
+  const current = await prisma.service.findUnique({ where: { id } })
+  if (!current) return
+
+  const target = await prisma.service.findFirst({
+    where: {
+      order: direction === 'up' 
+       ? { lt: current.order } 
+        : { gt: current.order },
+      category: current.category // نبدل داخل نفس القسم فقط
+    },
+    orderBy: { order: direction === 'up'? 'desc' : 'asc' }
+  })
+
+  if (!target) return
+
+  await prisma.$transaction([
+    prisma.service.update({
+      where: { id: current.id },
+      data: { order: target.order }
+    }),
+    prisma.service.update({
+      where: { id: target.id },
+      data: { order: current.order }
+    })
+  ])
+  
   revalidatePath('/admin')
 }
 
@@ -60,8 +96,8 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         </div>
 
         <div style={{ padding: '16px 12px', flex: 1, overflowY: 'auto' }}>
-          <Link href="/admin" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', marginBottom: 8, background: activeCat==='all'? 'linear-gradient(90deg, rgba(168,85,247,0.25), transparent)' : 'transparent', borderRadius: 10, color: '#fff', textDecoration: 'none', borderRight: activeCat==='all'? '3px solid #a855f7' : '3px solid transparent' }}>
-            <svg width="20" height="20" fill="none" stroke="#a855f7" strokeWidth="2" style={{ filter: 'drop-shadow(0 0 6px #a855f7)' }}><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <Link href="/admin" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', marginBottom: 8, background: activeCat === 'all'? 'linear-gradient(90deg, rgba(168,85,247,0.25), transparent)' : 'transparent', borderRadius: 10, color: '#fff', textDecoration: 'none', borderRight: activeCat === 'all'? '3px solid #a855f7' : '3px solid transparent' }}>
+            <svg width="20" height="20" fill="none" stroke="#a855f7" strokeWidth="2" style={{ filter: 'drop-shadow(0 0 6px #a855f7)' }}><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             الرئيسية
           </Link>
 
@@ -72,7 +108,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
             return (
               <Link key={cat} href={`/admin?cat=${cat}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', marginBottom: 4, borderRadius: 10, background: isActive? 'rgba(15,23,42,0.8)' : 'transparent', textDecoration: 'none', border: isActive? `1px solid ${meta.color}40` : '1px solid transparent', transition: '0.2s' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <svg width="20" height="20" fill="none" stroke={meta.color} strokeWidth="1.8" style={{ filter: `drop-shadow(0 0 8px ${meta.color})` }}><path d={meta.icon} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="20" height="20" fill="none" stroke={meta.color} strokeWidth="1.8" style={{ filter: `drop-shadow(0 0 8px ${meta.color})` }}><path d={meta.icon} strokeLinecap="round" strokeLinejoin="round" /></svg>
                   <span style={{ color: isActive? '#fff' : '#cbd5e1', fontSize: 14 }}>{meta.name}</span>
                 </div>
                 <span style={{ background: '#0f172a', color: meta.color, fontSize: 11, padding: '2px 8px', borderRadius: 6, border: `1px solid ${meta.color}30`, boxShadow: isActive? `0 0 10px ${meta.color}40` : 'none' }}>{grouped[cat].length}</span>
@@ -84,7 +120,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         <div style={{ padding: 12, borderTop: '1px solid #1e293b' }}>
           <Link href="/admin/settings" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', marginBottom: 8, background: 'rgba(139,92,246,0.12)', borderRadius: 8, color: '#c4b5fd', textDecoration: 'none', fontSize: 13, border: '1px solid rgba(139,92,246,0.3)' }}>
             <span>الإعدادات</span>
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 0 001.82.33h.01a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.01a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 0 001.82.33h.01a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.01a1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></svg>
           </Link>
 
           <Link href="/" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#0f172a', borderRadius: 8, color: '#94a3b8', textDecoration: 'none', fontSize: 13, border: '1px solid #1e293b' }}>← العودة للموقع</Link>
@@ -117,17 +153,65 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
           <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: 14, padding: 18 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14 }}>
-              <h3 style={{ margin: 0 }}>الخدمات {activeCat!=='all' && `- ${catMeta[activeCat]?.name}`}</h3>
+              <h3 style={{ margin: 0 }}>الخدمات {activeCat!== 'all' && `- ${catMeta[activeCat]?.name}`}</h3>
               <Link href="/admin/service/new" style={{ padding: '6px 12px', background: '#a855f7', borderRadius: 8, color: '#fff', textDecoration: 'none', fontSize: 13 }}>+ إضافة خدمة</Link>
             </div>
             <div style={{ maxHeight: '60vh', overflow: 'auto' }}>
               <table style={{ width: '100%', fontSize: 14 }}>
                 <thead style={{ color: '#64748b', position: 'sticky', top: 0, background: '#0b1020' }}>
-                  <tr><th style={{ textAlign: 'right', padding: 10 }}></th><th style={{ textAlign: 'right', padding: 10 }}>الخدمة</th><th style={{ textAlign: 'right', padding: 10 }}>القسم</th><th style={{ textAlign: 'right', padding: 10 }}>الحالة</th><th style={{ textAlign: 'right', padding: 10 }}>تعديل</th></tr>
+                  <tr>
+                    <th style={{ textAlign: 'center', padding: 10, width: 80 }}>الترتيب</th>
+                    <th style={{ textAlign: 'right', padding: 10 }}></th>
+                    <th style={{ textAlign: 'right', padding: 10 }}>الخدمة</th>
+                    <th style={{ textAlign: 'right', padding: 10 }}>القسم</th>
+                    <th style={{ textAlign: 'right', padding: 10 }}>الحالة</th>
+                    <th style={{ textAlign: 'right', padding: 10 }}>تعديل</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {filteredServices.map((s:any) => (
+                  {filteredServices.map((s: any, index: number) => (
                     <tr key={s.id} style={{ borderTop: '1px solid #1e293b' }}>
+                      <td style={{ padding: 10 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                          <form action={moveService}>
+                            <input type="hidden" name="id" value={s.id} />
+                            <input type="hidden" name="direction" value="up" />
+                            <button 
+                              disabled={index === 0} 
+                              style={{ 
+                                background: '#1e293b', 
+                                border: '1px solid #334155', 
+                                borderRadius: 6, 
+                                padding: 4, 
+                                cursor: index === 0? 'not-allowed' : 'pointer',
+                                opacity: index === 0? 0.3 : 1,
+                                display: 'flex'
+                              }}
+                            >
+                              <ChevronUp size={14} color="#a855f7" />
+                            </button>
+                          </form>
+                          <span style={{ fontSize: 11, color: '#64748b' }}>{s.order}</span>
+                          <form action={moveService}>
+                            <input type="hidden" name="id" value={s.id} />
+                            <input type="hidden" name="direction" value="down" />
+                            <button 
+                              disabled={index === filteredServices.length - 1} 
+                              style={{ 
+                                background: '#1e293b', 
+                                border: '1px solid #334155', 
+                                borderRadius: 6, 
+                                padding: 4, 
+                                cursor: index === filteredServices.length - 1? 'not-allowed' : 'pointer',
+                                opacity: index === filteredServices.length - 1? 0.3 : 1,
+                                display: 'flex'
+                              }}
+                            >
+                              <ChevronDown size={14} color="#a855f7" />
+                            </button>
+                          </form>
+                        </div>
+                      </td>
                       <td style={{ padding: 10 }}><img src={s.image?.replace('/upload/', '/upload/f_auto,q_auto/') || ''} style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'cover', background: '#1e293b' }} loading="lazy" /></td>
                       <td style={{ padding: 10 }}>{s.name}</td>
                       <td style={{ padding: 10, color: '#94a3b8' }}>{catMeta[s.category]?.name || s.category}</td>
